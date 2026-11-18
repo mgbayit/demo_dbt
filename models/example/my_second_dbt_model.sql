@@ -1,6 +1,9 @@
+{{ config(materialized='table', query_tag='test') }}
 
--- Use the `ref` function to select from other models
+with final as (
+    select * from {{ ref('my_first_dbt_model') }}
+    where id = 1
+)
 
-select *
-from {{ ref('my_first_dbt_model') }}
-where id = 1
+select *, '{{ invocation_id }}' as invocation_id
+from final
